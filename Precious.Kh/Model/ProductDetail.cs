@@ -50,7 +50,7 @@ namespace Precious.Kh.Model
 
 		public Guid IDProduct { get; set; }
 		public Guid IDColor { get; set; }
-		public Guid IDSale { get; set; }
+		public Guid? IDSale { get; set; }
 		public Guid IDSize { get; set; }
 
 		public virtual Product? Product { get; set; }

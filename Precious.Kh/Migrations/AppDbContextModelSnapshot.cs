@@ -478,7 +478,7 @@ namespace Precious.Kh.Migrations
                     b.Property<Guid>("IDProduct")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IDSale")
+                    b.Property<Guid?>("IDSale")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("IDSize")
@@ -823,9 +823,7 @@ namespace Precious.Kh.Migrations
 
                     b.HasOne("Precious.Kh.Model.Sale", "Sale")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("IDSale")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IDSale");
 
                     b.HasOne("Precious.Kh.Model.Size", "Size")
                         .WithMany("ProductDetails")

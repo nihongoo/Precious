@@ -22,7 +22,7 @@ namespace Precious.core.Extention
 
 			var cloudinary = new CloudinaryDotNet.Cloudinary(cloudinaryAccount);
 			services.AddSingleton(cloudinary);
-
+			services.AddScoped<ProductService>();
 		}
 	}
 }

@@ -8,11 +8,6 @@ namespace Precious
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-			//builder.Services.AddDbContext<AppDbContext>(options =>
-			//options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-			//builder.Services.AddScoped(typeof(AllService<>));
-
 			builder.Services.AddExtentionsService(builder.Configuration);
 
 			builder.Services.AddControllers();
@@ -30,7 +25,7 @@ namespace Precious
 			}
 
 			app.UseHttpsRedirection();
-
+			app.UseRouting();
 			app.UseAuthorization();
 
 

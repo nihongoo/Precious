@@ -13,7 +13,7 @@ namespace Precious.core.Extention
 		{
 			if(value is DateTime dateTime)
 			{
-				if(dateTime < DateTime.Now)
+				if(dateTime.Date < DateTime.Now.Date)
 				{
 					return new ValidationResult("Ngày nhập không được nhỏ hơn ngày hiện tại.");
 				}

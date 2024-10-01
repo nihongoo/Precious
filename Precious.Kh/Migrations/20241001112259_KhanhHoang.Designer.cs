@@ -12,7 +12,7 @@ using Precious.Kh.Model;
 namespace Precious.Kh.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240928090034_KhanhHoang")]
+    [Migration("20241001112259_KhanhHoang")]
     partial class KhanhHoang
     {
         /// <inheritdoc />
@@ -481,7 +481,7 @@ namespace Precious.Kh.Migrations
                     b.Property<Guid>("IDProduct")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IDSale")
+                    b.Property<Guid?>("IDSale")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("IDSize")
@@ -826,9 +826,7 @@ namespace Precious.Kh.Migrations
 
                     b.HasOne("Precious.Kh.Model.Sale", "Sale")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("IDSale")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IDSale");
 
                     b.HasOne("Precious.Kh.Model.Size", "Size")
                         .WithMany("ProductDetails")
