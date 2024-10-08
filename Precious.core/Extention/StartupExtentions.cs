@@ -16,7 +16,7 @@ namespace Precious.core.Extention
 
 			// Cấu hình Cloudinary
 			var cloudinaryAccount = new CloudinaryDotNet.Account(
-				"KhanhHoang",
+				"dtlxhfejw",
 				"928531516173692",
 				"YMG2UIncBzLXz7CRi_Fl2-iIh98");
 

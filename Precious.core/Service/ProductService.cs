@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CloudinaryDotNet;
+using Microsoft.EntityFrameworkCore;
 using Precious.core.IService;
 using Precious.core.Models;
 using Precious.Kh.Model;
@@ -13,9 +14,11 @@ namespace Precious.core.Service
 	public class ProductService : IProductService
 	{
 		private readonly AppDbContext _dbContext;
-		public ProductService(AppDbContext dbContext)
+		private readonly Cloudinary _cloudinary;
+		public ProductService(AppDbContext dbContext, Cloudinary cloudinary)
 		{
 			_dbContext = dbContext;
+			_cloudinary = cloudinary;
 		}
 
 		public async Task<(bool k, string msg)> AddProduct(ProductViewModel product, List<ProductDetailViewModel> productDetails)
@@ -37,13 +40,15 @@ namespace Precious.core.Service
 				if (!category.Any(k => k.IDCategory == product.IDCategory)) return (false, "IDCategory không tồn tại");
 				if (!tagetcustomer.Any(k => k.IDTagetCustomer == product.IDTagetCustomer)) return (false, "IDTagetCustomer không tồn tại");
 
+				var imgUrl = await GetAnImage(product.Image);
+
 				var item = new Product()
 				{
 					IDProduct = Guid.NewGuid(),
 					Name = product.Name,
 					Description = product.Description,
 					ProductCode = product.ProductCode,
-					Image = product.Image,
+					Image = imgUrl,
 					ThoiGianBaoHanh = product.ThoiGianBaoHanh,
 					ChatLieu = product.ChatLieu,
 					CreateTime = DateTime.Now,
@@ -109,6 +114,17 @@ namespace Precious.core.Service
 		public async Task<List<Sale>> GetSales()
 		{
 			return await _dbContext.Sale.ToListAsync();
+		}
+
+		/// <summary>
+		/// lấy link ảnh
+		/// </summary>
+		/// <param name="publicId"></param>
+		/// <returns></returns>
+		public async Task<string> GetAnImage(string publicId)
+		{
+			var res = _cloudinary.GetResource(publicId);
+			return res.Url;
 		}
 	}
 }
