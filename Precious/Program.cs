@@ -17,12 +17,15 @@ namespace Precious
 
 			var app = builder.Build();
 
+			app.UseCors("AllowSpecificOrigins");
+
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
 			}
+			app.UseCors("AllowAllOrigins");
 
 			app.UseHttpsRedirection();
 			app.UseRouting();

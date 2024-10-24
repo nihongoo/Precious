@@ -9,7 +9,7 @@ namespace Precious.core.Models
 {
 	public class TagetCustomersViewModel
 	{
-		public Guid IDTagetCustomer { get; set; }
+		public Guid id { get; set; }
 
 		/// <summary>
 		/// Đối tượng khách hàng

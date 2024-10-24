@@ -14,7 +14,6 @@ namespace Precious.Kh.Model
 		/// <summary>
 		/// Mã thương hiệu
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
 		public string BrandCode { get; set; }
 
 		/// <summary>

@@ -9,7 +9,7 @@ namespace Precious.core.Models
 {
 	public class CategoryViewModel
 	{
-		public Guid IDCategory { get; set; }
+		public Guid id { get; set; }
 
 		/// <summary>
 		/// Tên loại

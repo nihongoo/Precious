@@ -71,7 +71,7 @@ namespace Precious.Controller
 		{
 			var data = new Category()
 			{
-				IDCategory = Category.IDCategory,
+				IDCategory = Category.id,
 				Name = Category.Name,
 				Status = Category.Status
 			};
@@ -92,5 +92,13 @@ namespace Precious.Controller
 			if (result.k) return Ok(result.msg);
 			else return BadRequest(result.msg);
 		}
+
+		[HttpGet("Search")]
+		public async Task<IActionResult> Search(string query)
+		{
+			var result = await _allService.Search(query, "Name");
+			return Ok(result);
+		}
+
 	}
 }

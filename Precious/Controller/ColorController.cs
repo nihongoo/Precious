@@ -71,7 +71,7 @@ namespace Precious.Controller
 		{
 			var data = new Color()
 			{
-				IDColor = Color.IDColor,
+				IDColor = Color.id,
 				Name = Color.Name,
 				Status = Color.Status
 			};

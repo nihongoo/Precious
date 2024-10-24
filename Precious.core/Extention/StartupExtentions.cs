@@ -21,8 +21,18 @@ namespace Precious.core.Extention
 				"YMG2UIncBzLXz7CRi_Fl2-iIh98");
 
 			var cloudinary = new CloudinaryDotNet.Cloudinary(cloudinaryAccount);
+
 			services.AddSingleton(cloudinary);
 			services.AddScoped<ProductService>();
+
+			//Cấu hình CORS
+			services.AddCors(options =>
+			{
+				options.AddPolicy("AllowSpecificOrigins",
+					builder => builder.WithOrigins("http://localhost:3000")
+									 .AllowAnyMethod()
+									 .AllowAnyHeader());
+			});
 		}
 	}
 }

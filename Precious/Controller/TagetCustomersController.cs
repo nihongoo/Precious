@@ -71,7 +71,7 @@ namespace Precious.Controller
 		{
 			var data = new TagetCustomers()
 			{
-				IDTagetCustomer = TagetCustomers.IDTagetCustomer,
+				IDTagetCustomer = TagetCustomers.id,
 				Name = TagetCustomers.Name,
 				Status = TagetCustomers.Status
 			};

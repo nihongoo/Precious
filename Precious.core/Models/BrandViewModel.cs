@@ -9,12 +9,11 @@ namespace Precious.core.Models
 {
 	public class BrandViewModel
 	{
-		public Guid IDBrand { get; set; }
+		public Guid id { get; set; }
 
 		/// <summary>
 		/// Mã thương hiệu
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
 		public string BrandCode { get; set; }
 
 		/// <summary>

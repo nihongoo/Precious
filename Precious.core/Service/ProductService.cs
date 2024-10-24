@@ -40,6 +40,7 @@ namespace Precious.core.Service
 				if (!category.Any(k => k.IDCategory == product.IDCategory)) return (false, "IDCategory không tồn tại");
 				if (!tagetcustomer.Any(k => k.IDTagetCustomer == product.IDTagetCustomer)) return (false, "IDTagetCustomer không tồn tại");
 
+
 				var imgUrl = await GetAnImage(product.Image);
 
 				var item = new Product()

@@ -51,12 +51,21 @@ namespace Precious.Controller
 		[HttpPost("Create-Brand")]
 		public async Task<IActionResult> Create(BrandViewModel brand)
 		{
-			var checkUnique = await _allService.CheckUnique("BrandCode", brand.BrandCode);
+			char firstLetter = brand.Name[0];
+			Random random = new Random();
+			string brandCode = firstLetter.ToString().ToUpper();
+
+			for (int i = 0; i < 8; i++)
+			{
+				int digit = random.Next(0, 10);
+				brandCode += digit.ToString();
+			}
+			var checkUnique = await _allService.CheckUnique("BrandCode", brandCode);
 			if (checkUnique.k == false) return BadRequest(checkUnique.msg);
 			var data = new Brand()
 			{
 				IDBrand = Guid.NewGuid(),
-				BrandCode = brand.BrandCode,
+				BrandCode = brandCode,
 				Name = brand.Name,
 				Status = 1
 			};
@@ -73,14 +82,12 @@ namespace Precious.Controller
 		[HttpPut("Edit-Brand")]
 		public async Task<IActionResult> Update(BrandViewModel brand)
 		{
-			var checkUnique = await _allService.CheckUnique("BrandCode", brand.BrandCode);
-			if (checkUnique.k == false) return BadRequest(checkUnique.msg);
 			var data = new Brand()
 			{
-				IDBrand = brand.IDBrand,
+				IDBrand = brand.id,	
 				BrandCode = brand.BrandCode,
 				Name = brand.Name,
-				Status = brand.Status
+				Status = 1
 			};
 			var result = await _allService.Update(data);
 			if (result.k) return Ok(result.msg);
@@ -99,5 +106,11 @@ namespace Precious.Controller
 			if (result.k) return Ok(result.msg);
 			else return BadRequest(result.msg);
 		}
-    }
+		[HttpGet("Search")]
+		public async Task<IActionResult> Search(string query)
+		{
+			var result = await _allService.Search(query, "Name");
+			return Ok(result);
+		}
+	}
 }

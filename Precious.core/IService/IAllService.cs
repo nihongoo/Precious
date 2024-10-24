@@ -8,5 +8,6 @@
 		Task<(bool k, string msg)> Update(T obj);
 		Task<(bool k, string msg)> Delete(dynamic ID);
 		Task<(bool k, string msg)> CheckUnique(string prod, object value);
+		Task<List<T>> Search(string query, string prod);
 	}
 }

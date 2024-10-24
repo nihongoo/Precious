@@ -9,7 +9,7 @@ namespace Precious.core.Models
 {
 	public class ColorViewModel
 	{
-		public Guid IDColor { get; set; }
+		public Guid id { get; set; }
 
 		/// <summary>
 		/// Tên màu sắc
