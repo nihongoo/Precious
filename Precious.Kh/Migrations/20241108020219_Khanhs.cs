@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Precious.Kh.Migrations
 {
     /// <inheritdoc />
-    public partial class LiemKhiets : Migration
+    public partial class Khanhs : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,6 +67,19 @@ namespace Precious.Kh.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.IDCustomer);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meterials",
+                columns: table => new
+                {
+                    IDMeterial = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meterials", x => x.IDMeterial);
                 });
 
             migrationBuilder.CreateTable(
@@ -141,7 +154,8 @@ namespace Precious.Kh.Migrations
                     Value = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     StartDay = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDay = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    EndDay = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -199,8 +213,8 @@ namespace Precious.Kh.Migrations
                     UserName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IDStaff = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDCustomer = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IDStaff = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IDCustomer = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -209,14 +223,12 @@ namespace Precious.Kh.Migrations
                         name: "FK_Account_Customer_IDCustomer",
                         column: x => x.IDCustomer,
                         principalTable: "Customer",
-                        principalColumn: "IDCustomer",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "IDCustomer");
                     table.ForeignKey(
                         name: "FK_Account_Staff_IDStaff",
                         column: x => x.IDStaff,
                         principalTable: "Staff",
-                        principalColumn: "IdStaff",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "IdStaff");
                 });
 
             migrationBuilder.CreateTable(
@@ -227,14 +239,13 @@ namespace Precious.Kh.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ThoiGianBaoHanh = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ChatLieu = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    IDSize = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IDBrand = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IDCategory = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IDMeterial = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IDTagetCustomer = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -253,10 +264,10 @@ namespace Precious.Kh.Migrations
                         principalColumn: "IDCategory",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Size_IDSize",
-                        column: x => x.IDSize,
-                        principalTable: "Size",
-                        principalColumn: "IDSize",
+                        name: "FK_Product_Meterials_IDMeterial",
+                        column: x => x.IDMeterial,
+                        principalTable: "Meterials",
+                        principalColumn: "IDMeterial",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Product_TagetCustomers_IDTagetCustomer",
@@ -353,7 +364,8 @@ namespace Precious.Kh.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     IDProduct = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IDColor = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IDSale = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IDSale = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IDSize = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -374,7 +386,12 @@ namespace Precious.Kh.Migrations
                         name: "FK_ProductDetail_Sale_IDSale",
                         column: x => x.IDSale,
                         principalTable: "Sale",
-                        principalColumn: "IDSale",
+                        principalColumn: "IDSale");
+                    table.ForeignKey(
+                        name: "FK_ProductDetail_Size_IDSize",
+                        column: x => x.IDSize,
+                        principalTable: "Size",
+                        principalColumn: "IDSize",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -457,13 +474,15 @@ namespace Precious.Kh.Migrations
                 name: "IX_Account_IDCustomer",
                 table: "Account",
                 column: "IDCustomer",
-                unique: true);
+                unique: true,
+                filter: "[IDCustomer] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Account_IDStaff",
                 table: "Account",
                 column: "IDStaff",
-                unique: true);
+                unique: true,
+                filter: "[IDStaff] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AddressCustomer_IDCustomer",
@@ -538,9 +557,9 @@ namespace Precious.Kh.Migrations
                 column: "IDCategory");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_IDSize",
+                name: "IX_Product_IDMeterial",
                 table: "Product",
-                column: "IDSize");
+                column: "IDMeterial");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_IDTagetCustomer",
@@ -561,6 +580,11 @@ namespace Precious.Kh.Migrations
                 name: "IX_ProductDetail_IDSale",
                 table: "ProductDetail",
                 column: "IDSale");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDetail_IDSize",
+                table: "ProductDetail",
+                column: "IDSize");
         }
 
         /// <inheritdoc />
@@ -612,13 +636,16 @@ namespace Precious.Kh.Migrations
                 name: "Sale");
 
             migrationBuilder.DropTable(
+                name: "Size");
+
+            migrationBuilder.DropTable(
                 name: "Brand");
 
             migrationBuilder.DropTable(
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Size");
+                name: "Meterials");
 
             migrationBuilder.DropTable(
                 name: "TagetCustomers");

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Precious.core.IService;
 using Precious.core.Models;
 using Precious.core.Service;
@@ -13,10 +14,12 @@ namespace Precious.Controller
 	public class AccountController : ControllerBase
 	{
 		private readonly AccountService _Service;
-        public AccountController()
-        {
+		private readonly AllService<Customer> _allService;
+		public AccountController(AllService<Customer> service)
+		{
 			_Service = new AccountService();
-        }
+			_allService = service;
+		}
 
 		/// <summary>
 		/// Login controller
@@ -25,7 +28,7 @@ namespace Precious.Controller
 		/// <param name="password"></param>
 		/// <returns></returns>
 		[AllowAnonymous]
-		[HttpPost("/login")]
+		[HttpGet("/login")]
 		public async Task<IActionResult> LoginAsnyc(string username, string password)
 		{
 			var result = await _Service.Login(username, password);
@@ -38,8 +41,6 @@ namespace Precious.Controller
 				return BadRequest(result.msg);
 			}
 		}
-
-
 		/// <summary>
 		/// Customer sign up
 		/// </summary>
@@ -57,6 +58,35 @@ namespace Precious.Controller
 			else
 			{
 				return BadRequest(result.msg);
+			}
+		}
+		/// <summary>
+		/// Get all User
+		/// </summary>
+		/// <returns></returns>
+		[HttpGet("ALl-User")]
+		public async Task<IActionResult> GetAllUser()
+		{
+			return Ok(await _allService.GetAll());
+		}
+		/// <summary>
+		/// Search
+		/// </summary>
+		/// <param name="query"></param>
+		/// <param name="isSearchEmail"></param>
+		/// <returns></returns>
+		[HttpGet("Search")]
+		public async Task<IActionResult> Search(string query, bool isSearchEmail)
+		{
+			if (isSearchEmail)
+			{
+				var result = await _allService.Search(query, "Email");
+				return Ok(result);
+			}
+			else
+			{
+				var result = await _allService.Search(query, "PhoneNumber");
+				return Ok(result);
 			}
 		}
 	}

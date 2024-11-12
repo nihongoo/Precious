@@ -1,4 +1,5 @@
-﻿using Precious.core.IService;
+﻿using Microsoft.EntityFrameworkCore;
+using Precious.core.IService;
 using Precious.core.Models;
 using Precious.Kh.Model;
 using System;
@@ -32,10 +33,13 @@ namespace Precious.core.Service
 				if (_dbContext.Staff.Any(k => k.Email == staff.Email)) return (false, "Email đã tồn tại.");
 				if (_dbContext.Staff.Any(k => k.PhoneNumber == staff.PhoneNumber)) return (false, "Số điện thoại đã tồn tại");
 
+				var genStaffCode = GenerateSerialCode();
+				staff.StaffCode = genStaffCode;
+
 				var stf = new Staff()
 				{
 					IdStaff = Guid.NewGuid(),
-					StaffCode = "ST-" + staff.StaffCode,
+					StaffCode = "ST-" + genStaffCode,
 					StaffName = staff.StaffName,
 					Email = staff.Email,
 					PhoneNumber = staff.PhoneNumber,
@@ -62,6 +66,30 @@ namespace Precious.core.Service
 			{
 				return (false, ex.Message);
 			}
+		}
+
+		public async Task<(bool k, string msg)> DeleteStaff(Guid id)
+		{
+			try
+			{
+				var staff = await _dbContext.Staff.FindAsync(id);
+				if (staff == null) return (false, "Không tìm thấy nhân viên này");
+				_dbContext.Remove(staff);
+				var account = await _dbContext.Account.FirstOrDefaultAsync(k=>k.IDStaff == id);
+				if (account == null) return (false, "Không tìm thấy tài khoản này");
+				_dbContext.Account.Remove(account);
+				await _dbContext.SaveChangesAsync();
+				return (true, "Xóa thành công");
+			}
+			catch (Exception ex)
+			{
+				return(false,"Đã có lỗi" + ex.Message);
+			}
+		}
+
+		private string GenerateSerialCode()
+		{
+			return Guid.NewGuid().ToString("N").Substring(0, 10).ToUpper();
 		}
 	}
 }

@@ -401,15 +401,30 @@ namespace Precious.Kh.Migrations
                     b.ToTable("ImageProductDetail");
                 });
 
+            modelBuilder.Entity("Precious.Kh.Model.Meterial", b =>
+                {
+                    b.Property<Guid>("IDMeterial")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("IDMeterial");
+
+                    b.ToTable("Meterials");
+                });
+
             modelBuilder.Entity("Precious.Kh.Model.Product", b =>
                 {
                     b.Property<Guid>("IDProduct")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ChatLieu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
@@ -424,11 +439,13 @@ namespace Precious.Kh.Migrations
                     b.Property<Guid>("IDCategory")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("IDMeterial")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("IDTagetCustomer")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -451,6 +468,8 @@ namespace Precious.Kh.Migrations
                     b.HasIndex("IDBrand");
 
                     b.HasIndex("IDCategory");
+
+                    b.HasIndex("IDMeterial");
 
                     b.HasIndex("IDTagetCustomer");
 
@@ -794,6 +813,12 @@ namespace Precious.Kh.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Precious.Kh.Model.Meterial", "Meterial")
+                        .WithMany("Products")
+                        .HasForeignKey("IDMeterial")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Precious.Kh.Model.TagetCustomers", "TagetCustomer")
                         .WithMany("Products")
                         .HasForeignKey("IDTagetCustomer")
@@ -803,6 +828,8 @@ namespace Precious.Kh.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Meterial");
 
                     b.Navigation("TagetCustomer");
                 });
@@ -876,6 +903,11 @@ namespace Precious.Kh.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("FavoriteProducts");
+                });
+
+            modelBuilder.Entity("Precious.Kh.Model.Meterial", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Precious.Kh.Model.Product", b =>

@@ -26,24 +26,18 @@ namespace Precious.Kh.Model
 		/// <summary>
 		/// Mã sản phẩm
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
 		public string ProductCode { get; set; }
 
 		/// <summary>
 		/// link ảnh sản phẩm/ nếu không thêm thì để 1 ảnh defaul
 		/// </summary>
-		public string Image { get; set; }
+		public string? Image { get; set; }
 
 		/// <summary>
 		/// thời gian bảo hành
 		/// </summary>
 		[Required(ErrorMessage = "Không được để trống.")]
 		public string ThoiGianBaoHanh { get; set; }
-
-		/// <summary>
-		/// Chất liệu
-		/// </summary>
-		public string ChatLieu { get; set; }
 
 		/// <summary>
 		/// ngày tạo sản phẩm
@@ -56,11 +50,13 @@ namespace Precious.Kh.Model
 		//public Guid IDSize { get; set; }
 		public Guid IDBrand { get; set; }
 		public Guid IDCategory { get; set; }
+		public Guid IDMeterial { get; set; }
 		public Guid IDTagetCustomer { get; set; }
 
 		//public virtual Size Size { get; set; }
 		public virtual Brand? Brand { get; set; }
 		public virtual Category? Category { get; set; }
+		public virtual Meterial? Meterial { get; set; }
 		public virtual TagetCustomers? TagetCustomer { get; set; }
 		public virtual FavoriteProducts? FavoriteProducts { get; set;}
 		public virtual ICollection<ProductDetail>? ProductDetail { get; set; }

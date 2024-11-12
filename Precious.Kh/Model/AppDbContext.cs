@@ -30,6 +30,7 @@ namespace Precious.Kh.Model
 		public DbSet<Customer> Customer { get; set; }
 		public DbSet<FavoriteProducts> FavoriteProducts { get; set; }
 		public DbSet<ImageProductDetail> ImageProductDetail { get; set; }
+		public DbSet<Meterial> Meterials { get; set; }
 		public DbSet<Product> Product { get; set; }
 		public DbSet<ProductDetail> ProductDetail { get; set; }
 		public DbSet<Sale> Sale { get; set; }

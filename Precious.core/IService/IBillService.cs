@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Precious.core.IService
 {
-	public interface IStaffService
+	public interface IBillService
 	{
-		Task<(bool k, string msg)> AddStaff(StaffViewModel staff);
-		Task<(bool k, string msg)> DeleteStaff(Guid id);
+		Task<(bool k, string msg)> CreateBillOffline(BillViewModel bill, List<BillDetailViewModel> detail);
 	}
 }

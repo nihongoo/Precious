@@ -28,7 +28,9 @@ namespace Precious.Controller
 		[HttpGet("Get-All-Size")]
 		public async Task<IActionResult> GetAll()
 		{
-			return Ok(await _allService.GetAll());
+			var data = await _allService.GetAll();
+			data = data.OrderBy(x => int.Parse(x.Name)).ToList();
+			return Ok(data);
 		}
 
 		/// <summary>

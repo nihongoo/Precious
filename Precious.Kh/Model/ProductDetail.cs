@@ -15,7 +15,6 @@ namespace Precious.Kh.Model
 		/// <summary>
 		/// Mã sản phẩm chi tiết
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
 		public string ProductDetailCode { get; set; }
 
 		/// <summary>

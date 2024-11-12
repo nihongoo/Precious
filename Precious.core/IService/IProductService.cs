@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Precious.core.IService
 {
-	interface IProductService
+	public interface IProductService
 	{
 		Task<(bool k, string msg)> AddProduct(ProductViewModel product, List<ProductDetailViewModel> productDetails);
+		Task<(bool k, string msg)> AddToCart(Guid productDetailId, int quantity, Guid UserID);
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Precious.core.Models;
 using Precious.core.Service;
 using Precious.Kh.Model;
@@ -9,24 +8,24 @@ namespace Precious.Controller
 {
 	[Route("[controller]")]
 	[ApiController]
-	public class BrandController : ControllerBase
+	public class MeterialController : ControllerBase
 	{
-		private readonly AllService<Brand> _allService;
+		private readonly AllService<Meterial> _allService;
 
 		/// <summary>
 		/// contructor
 		/// </summary>
 		/// <param name="service"></param>
-        public BrandController(AllService<Brand> service)
-        {
+		public MeterialController(AllService<Meterial> service)
+		{
 			_allService = service;
-        }
+		}
 
 		/// <summary>
 		/// Get all
 		/// </summary>
 		/// <returns></returns>
-		[HttpGet("Get-All-Brand")]
+		[HttpGet("Get-All-Meterial")]
 		public async Task<IActionResult> GetAll()
 		{
 			return Ok(await _allService.GetAll());
@@ -37,7 +36,7 @@ namespace Precious.Controller
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <returns></returns>
-		[HttpGet("Get-By-ID-Brand")]
+		[HttpGet("Get-By-ID-Meterial")]
 		public async Task<IActionResult> GetByID(Guid Id)
 		{
 			return Ok(await _allService.GetAsync(Id));
@@ -46,48 +45,35 @@ namespace Precious.Controller
 		/// <summary>
 		/// create new record
 		/// </summary>
-		/// <param name="brand"></param>
+		/// <param name="Meterial"></param>
 		/// <returns></returns>
-		[HttpPost("Create-Brand")]
-		public async Task<IActionResult> Create(BrandViewModel brand)
+		[HttpPost("Create-Meterial")]
+		public async Task<IActionResult> Create(MeterialViewModel Meterial)
 		{
-			char firstLetter = brand.Name[0];
-			Random random = new Random();
-			string brandCode = firstLetter.ToString().ToUpper();
-
-			for (int i = 0; i < 8; i++)
+			var data = new Meterial()
 			{
-				int digit = random.Next(0, 10);
-				brandCode += digit.ToString();
-			}
-			var checkUnique = await _allService.CheckUnique("BrandCode", brandCode);
-			if (checkUnique.k == false) return BadRequest(checkUnique.msg);
-			var data = new Brand()
-			{
-				IDBrand = Guid.NewGuid(),
-				BrandCode = brandCode,
-				Name = brand.Name,
+				IDMeterial = Guid.NewGuid(),
+				Name = Meterial.Name,
 				Status = 1
 			};
 			var result = await _allService.Add(data);
-			if(result.k) return Ok(result.msg);
+			if (result.k) return Ok(result.msg);
 			else return BadRequest(result.msg);
 		}
 
 		/// <summary>
 		/// update a record
 		/// </summary>
-		/// <param name="brand"></param>
+		/// <param name="Meterial"></param>
 		/// <returns></returns>
-		[HttpPut("Edit-Brand")]
-		public async Task<IActionResult> Update(BrandViewModel brand)
+		[HttpPut("Edit-Meterial")]
+		public async Task<IActionResult> Update(MeterialViewModel Meterial)
 		{
-			var data = new Brand()
+			var data = new Meterial()
 			{
-				IDBrand = brand.id,	
-				BrandCode = brand.BrandCode,
-				Name = brand.Name,
-				Status = 1
+				IDMeterial = Meterial.id,
+				Name = Meterial.Name,
+				Status = Meterial.Status
 			};
 			var result = await _allService.Update(data);
 			if (result.k) return Ok(result.msg);
@@ -99,23 +85,20 @@ namespace Precious.Controller
 		/// </summary>
 		/// <param name="Id"></param>
 		/// <returns></returns>
-		[HttpDelete("Delete-Brand")]
+		[HttpDelete("Delete-Meterial")]
 		public async Task<IActionResult> Delete(Guid Id)
 		{
 			var result = await _allService.Delete(Id);
 			if (result.k) return Ok(result.msg);
 			else return BadRequest(result.msg);
 		}
-		/// <summary>
-		/// search
-		/// </summary>
-		/// <param name="query"></param>
-		/// <returns></returns>
+
 		[HttpGet("Search")]
 		public async Task<IActionResult> Search(string query)
 		{
 			var result = await _allService.Search(query, "Name");
 			return Ok(result);
 		}
+
 	}
 }

@@ -12,8 +12,8 @@ using Precious.Kh.Model;
 namespace Precious.Kh.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240926114010_Kh204116")]
-    partial class Kh204116
+    [Migration("20241108020219_Khanhs")]
+    partial class Khanhs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -404,15 +404,30 @@ namespace Precious.Kh.Migrations
                     b.ToTable("ImageProductDetail");
                 });
 
+            modelBuilder.Entity("Precious.Kh.Model.Meterial", b =>
+                {
+                    b.Property<Guid>("IDMeterial")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("IDMeterial");
+
+                    b.ToTable("Meterials");
+                });
+
             modelBuilder.Entity("Precious.Kh.Model.Product", b =>
                 {
                     b.Property<Guid>("IDProduct")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ChatLieu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
@@ -427,11 +442,13 @@ namespace Precious.Kh.Migrations
                     b.Property<Guid>("IDCategory")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("IDMeterial")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("IDTagetCustomer")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -454,6 +471,8 @@ namespace Precious.Kh.Migrations
                     b.HasIndex("IDBrand");
 
                     b.HasIndex("IDCategory");
+
+                    b.HasIndex("IDMeterial");
 
                     b.HasIndex("IDTagetCustomer");
 
@@ -481,7 +500,7 @@ namespace Precious.Kh.Migrations
                     b.Property<Guid>("IDProduct")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IDSale")
+                    b.Property<Guid?>("IDSale")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("IDSize")
@@ -635,6 +654,9 @@ namespace Precious.Kh.Migrations
 
                     b.Property<DateTime>("StartDay")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
@@ -794,6 +816,12 @@ namespace Precious.Kh.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Precious.Kh.Model.Meterial", "Meterial")
+                        .WithMany("Products")
+                        .HasForeignKey("IDMeterial")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Precious.Kh.Model.TagetCustomers", "TagetCustomer")
                         .WithMany("Products")
                         .HasForeignKey("IDTagetCustomer")
@@ -803,6 +831,8 @@ namespace Precious.Kh.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Meterial");
 
                     b.Navigation("TagetCustomer");
                 });
@@ -823,9 +853,7 @@ namespace Precious.Kh.Migrations
 
                     b.HasOne("Precious.Kh.Model.Sale", "Sale")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("IDSale")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IDSale");
 
                     b.HasOne("Precious.Kh.Model.Size", "Size")
                         .WithMany("ProductDetails")
@@ -875,16 +903,19 @@ namespace Precious.Kh.Migrations
 
                     b.Navigation("Bills");
 
-                    b.Navigation("Cart")
-                        .IsRequired();
+                    b.Navigation("Cart");
 
                     b.Navigation("FavoriteProducts");
                 });
 
+            modelBuilder.Entity("Precious.Kh.Model.Meterial", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("Precious.Kh.Model.Product", b =>
                 {
-                    b.Navigation("FavoriteProducts")
-                        .IsRequired();
+                    b.Navigation("FavoriteProducts");
 
                     b.Navigation("ProductDetail");
                 });
@@ -910,8 +941,7 @@ namespace Precious.Kh.Migrations
 
             modelBuilder.Entity("Precious.Kh.Model.Staff", b =>
                 {
-                    b.Navigation("Account")
-                        .IsRequired();
+                    b.Navigation("Account");
 
                     b.Navigation("Bills");
                 });

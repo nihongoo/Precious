@@ -15,7 +15,7 @@ namespace Precious.core.Models
 		/// <summary>
 		/// Tên sản phẩm
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
+		[Required(ErrorMessage = "Không được để trống tên sản phẩm.")]
 		public string Name { get; set; }
 
 		/// <summary>
@@ -26,7 +26,7 @@ namespace Precious.core.Models
 		/// <summary>
 		/// Mã sản phẩm
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
+		[Required(ErrorMessage = "Không được để trống mã sản phẩm.")]
 		public string ProductCode { get; set; }
 
 		/// <summary>
@@ -37,13 +37,8 @@ namespace Precious.core.Models
 		/// <summary>
 		/// thời gian bảo hành
 		/// </summary>
-		[Required(ErrorMessage = "Không được để trống.")]
 		public string ThoiGianBaoHanh { get; set; }
 
-		/// <summary>
-		/// Chất liệu
-		/// </summary>
-		public string? ChatLieu { get; set; }
 
 		/// <summary>
 		/// ngày tạo sản phẩm
@@ -54,15 +49,19 @@ namespace Precious.core.Models
 		public int Status { get; set; }
 		#endregion
 		#region Brand
-		[Required(ErrorMessage = "Không được để trống.")]
+		[Required(ErrorMessage = "Không được để trống thương hiệu.")]
 		public Guid IDBrand { get; set; }
 		#endregion
 		#region Category
-		[Required(ErrorMessage = "Không được để trống.")]
+		[Required(ErrorMessage = "Không được để trống loại sản phẩm.")]
 		public Guid IDCategory { get; set; }
 		#endregion
+		#region Meterial
+		[Required(ErrorMessage = "Không được để trống chất liệu.")]
+		public Guid IDMeterial { get; set; }
+		#endregion
 		#region TagetCustomer
-		[Required(ErrorMessage = "Không được để trống.")]
+		[Required(ErrorMessage = "Không được để trống đối tượng sử dụng.")]
 		public Guid IDTagetCustomer { get; set; }
 		#endregion
 

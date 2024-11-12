@@ -31,5 +31,19 @@ namespace Precious.Controller
 				return StatusCode(500, "Lỗi tải hình ảnh: " + ex.Message);
 			}
 		}
+		[HttpDelete("Delete")]
+		public async Task<IActionResult> Delete(string id)
+		{
+			try
+			{
+				var res = await _cloudinary.DeleteResourcesAsync(id);
+				return Ok(res);
+			}
+			catch (Exception ex)
+			{
+
+				return BadRequest(ex.Message);
+			}
+		}
 	}
 }
